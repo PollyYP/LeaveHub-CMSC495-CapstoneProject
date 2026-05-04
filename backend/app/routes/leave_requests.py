@@ -209,10 +209,7 @@ def delete_request(request_id: int, userId: int):
     if request.status != "Pending":
         raise HTTPException(status_code=400, detail="Only pending requests can be deleted")
 
-    leave_requests_crud.delete_request(request_id)
 
-    request_history_crud.create_history(
-        request_id=request_id, action="deleted", performed_by=userId
-    )
+    leave_requests_crud.delete_request(request_id)
 
     return {"message": "Leave request deleted"}
