@@ -57,3 +57,13 @@ def email_exists(email: str) -> bool:
         with conn.cursor() as cur:
             cur.execute("SELECT 1 FROM users WHERE email = %s", (email,))
             return cur.fetchone() is not None
+
+
+def update_password(user_id: int, new_password: str) -> bool:
+    with get_db() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE users SET password = %s WHERE user_id = %s",
+                (new_password, user_id),
+            )
+            return cur.rowcount > 0

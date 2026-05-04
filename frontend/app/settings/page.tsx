@@ -29,7 +29,7 @@ export default function SettingsPage() {
     }
   }, []);
 
-  const handlePasswordChange = (e: React.SyntheticEvent) => {
+  const handlePasswordChange = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
@@ -42,11 +42,34 @@ export default function SettingsPage() {
       return;
     }
 
-    console.log("Password change requested:", { currentPassword, newPassword });
-    setPasswordMessage("Password change is not available yet. Backend endpoint coming soon.");
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+    const stored = localStorage.getItem("user");
+    if (!stored) return;
+    const user = JSON.parse(stored);
+
+    try {
+      const res = await fetch("/_/backend/auth/change-password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.userId,
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        setPasswordMessage(err.detail || "Failed to change password.");
+        return;
+      }
+
+      setPasswordMessage("Password changed successfully!");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      setPasswordMessage("Could not connect to server.");
+    }
   };
 
   return (
