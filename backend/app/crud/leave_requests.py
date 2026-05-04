@@ -18,13 +18,20 @@ def _row_to_request(row: dict) -> LeaveRequest:
         comments=row.get("comments"),
         createdAt=row.get("created_at", datetime.now()),
         updatedAt=row.get("updated_at", datetime.now()),
+        userName=row.get("user_name"),
+        department=row.get("department"),
     )
 
 
 def get_all_requests() -> list[LeaveRequest]:
     with get_db() as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute("SELECT * FROM leave_requests ORDER BY request_id")
+            cur.execute(
+                """SELECT lr.*, u.name AS user_name, u.department
+                   FROM leave_requests lr
+                   LEFT JOIN users u ON lr.user_id = u.user_id
+                   ORDER BY lr.request_id"""
+            )
             return [_row_to_request(row) for row in cur.fetchall()]
 
 

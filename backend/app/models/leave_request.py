@@ -31,6 +31,8 @@ class LeaveRequestCreate(BaseModel):
 class LeaveRequest(BaseModel):
     requestId: int
     userId: int
+    userName: str | None = None
+    department: str | None = None
     reviewerId: int | None = None
     leaveType: str
     startDate: date

@@ -274,7 +274,7 @@ export default function ManagerDashboard() {
                     <div>
                       <p className="font-medium text-gray-900">{name}</p>
                       <p className="text-xs text-gray-500">
-                        {request.department || "IT Department"}
+                        {request.department || "No department"}
                       </p>
                     </div>
                   </div>
