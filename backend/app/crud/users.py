@@ -13,6 +13,7 @@ def _row_to_user(row: dict) -> User:
         managerId=row.get("manager_id"),
         department=row.get("department"),
         profileImage=row.get("profile_image"),
+        startDate=row.get("start_date"),
     )
 
 
@@ -43,11 +44,11 @@ def create_user(user: User) -> User:
     with get_db() as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(
-                """INSERT INTO users (name, email, password, role, manager_id, department, profile_image)
-                   VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """INSERT INTO users (name, email, password, role, manager_id, department, profile_image, start_date)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                    RETURNING *""",
                 (user.name, user.email, user.password, user.role,
-                 user.managerId, user.department, user.profileImage),
+                 user.managerId, user.department, user.profileImage, user.startDate),
             )
             return _row_to_user(cur.fetchone())
 

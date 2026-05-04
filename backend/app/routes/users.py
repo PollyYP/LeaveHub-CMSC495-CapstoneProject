@@ -21,7 +21,7 @@ def create_user(user: User):
     created = users_crud.create_user(user)
 
     current_year = date.today().year
-    leave_balances_crud.create_balance(created.userId, 1, 30, current_year)  # Vacation
+    leave_balances_crud.create_balance(created.userId, 1, 15, current_year)  # Vacation
     leave_balances_crud.create_balance(created.userId, 2, 10, current_year)  # Personal
 
     return {"message": "User created", "user": created}

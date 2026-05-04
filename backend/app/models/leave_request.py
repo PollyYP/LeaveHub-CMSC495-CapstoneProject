@@ -41,6 +41,7 @@ class LeaveRequest(BaseModel):
     description: str | None = None
     status: str = "Pending"
     comments: str | None = None
+    userStartDate: date | None = None
     createdAt: datetime = Field(default_factory=datetime.now)
     updatedAt: datetime = Field(default_factory=datetime.now)
 

@@ -20,6 +20,7 @@ def _row_to_request(row: dict) -> LeaveRequest:
         updatedAt=row.get("updated_at", datetime.now()),
         userName=row.get("user_name"),
         department=row.get("department"),
+        userStartDate=row.get("user_start_date"),
     )
 
 
@@ -27,7 +28,7 @@ def get_all_requests() -> list[LeaveRequest]:
     with get_db() as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(
-                """SELECT lr.*, u.name AS user_name, u.department
+                """SELECT lr.*, u.name AS user_name, u.department, u.start_date AS user_start_date
                    FROM leave_requests lr
                    LEFT JOIN users u ON lr.user_id = u.user_id
                    ORDER BY lr.request_id"""

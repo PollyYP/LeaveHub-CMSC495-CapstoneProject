@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import date
 
 
 class User(BaseModel):
@@ -10,3 +11,4 @@ class User(BaseModel):
     managerId: int | None = None
     department: str | None = None
     profileImage: str | None = None
+    startDate: date | None = None
