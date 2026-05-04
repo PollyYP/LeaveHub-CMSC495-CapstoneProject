@@ -3,6 +3,7 @@ from app.models.user import User
 from app.crud import users as users_crud
 from app.crud import leave_requests as leave_requests_crud
 from app.crud import leave_balances as leave_balances_crud
+from datetime import date
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -18,6 +19,11 @@ def create_user(user: User):
         raise HTTPException(status_code=400, detail="Email already exists")
 
     created = users_crud.create_user(user)
+
+    current_year = date.today().year
+    leave_balances_crud.create_balance(created.userId, 1, 30, current_year)  # Vacation
+    leave_balances_crud.create_balance(created.userId, 2, 10, current_year)  # Personal
+
     return {"message": "User created", "user": created}
 
 

@@ -3,6 +3,18 @@ from app.database import get_db
 from app.models.leave_balance import LeaveBalance
 
 
+def create_balance(user_id: int, leave_type_id: int, total_days: int, year: int) -> LeaveBalance:
+    with get_db() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                """INSERT INTO leave_balances (user_id, leave_type_id, total_days, used_days, year)
+                   VALUES (%s, %s, %s, 0, %s)
+                   RETURNING *""",
+                (user_id, leave_type_id, total_days, year),
+            )
+            return _row_to_balance(cur.fetchone())
+
+
 def _row_to_balance(row: dict) -> LeaveBalance:
     return LeaveBalance(
         balanceId=row["balance_id"],
