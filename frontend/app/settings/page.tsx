@@ -70,6 +70,14 @@ export default function SettingsPage() {
     } catch (error) {
       setPasswordMessage("Could not connect to server.");
     }
+
+    setTimeout(() => {
+      if (user.role === "Manager") {
+        window.location.href = "/manager";
+      } else {
+        window.location.href = "/employee";
+      }
+    }, 1500);
   };
 
   return (
