@@ -38,8 +38,8 @@ export default function Sidebar({ role }: SidebarProps) {
     const parsed = stored ? JSON.parse(stored) : null;
     setState({
       user: parsed
-        ? { name: parsed.name, email: parsed.email, department: parsed.department }
-        : { name: "", email: "", department: "" },
+        ? { name: parsed.name, email: parsed.email, department: parsed.department, startDate: parsed.startDate || "" }
+        : { name: "", email: "", department: "", startDate: "" },
       mounted: true,
     });
   }, []);
