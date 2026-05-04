@@ -189,7 +189,7 @@ export default function EmployeeDashboard() {
                     <p className="font-medium text-gray-900">
                       {request.leaveType}
                     </p>
-                    <StatusBadge status={request.status} />
+                    <StatusBadge status={request.status as "Pending" | "Approved" | "Rejected" | "Revision Requested"} />
                   </div>
                   <p className="text-sm text-gray-500">
                     Requested for {formatDate(request.startDate)}
