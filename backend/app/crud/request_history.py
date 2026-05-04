@@ -42,3 +42,12 @@ def create_history(
                 (request_id, action, performed_by),
             )
             return _row_to_history(cur.fetchone())
+
+
+def delete_history_by_request(request_id: int):
+    with get_db() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "DELETE FROM request_history WHERE request_id = %s", (request_id,)
+            )
+            return cur.rowcount
