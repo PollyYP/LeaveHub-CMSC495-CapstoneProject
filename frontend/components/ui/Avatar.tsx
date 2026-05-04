@@ -1,12 +1,9 @@
-import Image from "next/image";
-
 interface AvatarProps {
   name: string;
-  profileImage?: string | null;
   size?: "sm" | "md" | "lg";
 }
 
-export default function Avatar({ name, profileImage, size = "md" }: AvatarProps) {
+export default function Avatar({ name, size = "md" }: AvatarProps) {
   const initials = name
     .split(" ")
     .map((word) => word[0])
@@ -19,18 +16,6 @@ export default function Avatar({ name, profileImage, size = "md" }: AvatarProps)
     md: "w-10 h-10 text-sm",
     lg: "w-16 h-16 text-xl",
   };
-
-  if (profileImage) {
-    return (
-      <Image
-        src={profileImage}
-        alt={name}
-        className={`${sizeClasses[size]} rounded-full object-cover`}
-        width={size === "sm" ? 32 : size === "md" ? 40 : 64}
-        height={size === "sm" ? 32 : size === "md" ? 40 : 64}
-      />
-    );
-  }
 
   return (
     <div

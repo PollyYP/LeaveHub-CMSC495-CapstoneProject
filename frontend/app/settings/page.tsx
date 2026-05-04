@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Avatar from "@/components/ui/Avatar";
 import Header from "@/components/layout/Header";
 
@@ -10,14 +10,11 @@ export default function SettingsPage() {
     email: "",
     department: "",
     role: "",
-    profileImage: null as string | null,
   });
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
-  const [imageMessage, setImageMessage] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
@@ -28,7 +25,6 @@ export default function SettingsPage() {
         email: parsed.email,
         department: parsed.department,
         role: parsed.role || "Employee",
-        profileImage: parsed.profileImage,
       });
     }
   }, []);
@@ -53,46 +49,6 @@ export default function SettingsPage() {
     setConfirmPassword("");
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      setImageMessage("Please select an image file.");
-      return;
-    }
-
-    if (file.size > 2 * 1024 * 1024) {
-      setImageMessage("Image must be smaller than 2MB.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64 = reader.result as string;
-      const stored = localStorage.getItem("user");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        parsed.profileImage = base64;
-        localStorage.setItem("user", JSON.stringify(parsed));
-      }
-      setUser((prev) => ({ ...prev, profileImage: base64 }));
-      setImageMessage("Profile picture updated! Refresh to see changes in the sidebar.");
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleRemoveImage = () => {
-    const stored = localStorage.getItem("user");
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      parsed.profileImage = null;
-      localStorage.setItem("user", JSON.stringify(parsed));
-    }
-    setUser((prev) => ({ ...prev, profileImage: null }));
-    setImageMessage("Profile picture removed.");
-  };
-
   return (
     <div>
       <div className="md:hidden">
@@ -107,43 +63,16 @@ export default function SettingsPage() {
 
       <div className="space-y-6">
 
-        {/* Profile Picture */}
+        {/* Profile */}
         <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Picture</h3>
-          <div className="flex items-center gap-6">
-            <Avatar name={user.name || "User"} profileImage={user.profileImage} size="lg" />
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-2 rounded-full bg-indigo-500 text-white text-sm font-medium hover:bg-indigo-600 transition-colors"
-                >
-                  Upload Photo
-                </button>
-                {user.profileImage && (
-                  <button
-                    type="button"
-                    onClick={handleRemoveImage}
-                    className="px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-              <p className="text-xs text-gray-400">JPG, PNG or GIF. Max 2MB.</p>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile</h3>
+          <div className="flex items-center gap-4">
+            <Avatar name={user.name || "User"} size="lg" />
+            <div>
+              <p className="font-medium text-gray-900">{user.name}</p>
+              <p className="text-sm text-gray-500">{user.role}</p>
             </div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
           </div>
-          {imageMessage && (
-            <p className="text-sm text-indigo-600 mt-3">{imageMessage}</p>
-          )}
         </div>
 
         {/* Profile Info */}

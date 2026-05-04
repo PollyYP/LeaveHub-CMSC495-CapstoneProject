@@ -25,7 +25,7 @@ const managerLinks = [
 ];
 
 export default function Header({ userName, showNewRequestButton = false }: HeaderProps) {
-  const [user, setUser] = useState({ name: "", profileImage: null as string | null, role: "" });
+  const [user, setUser] = useState({ name: "", role: "" });
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +33,7 @@ export default function Header({ userName, showNewRequestButton = false }: Heade
     const stored = localStorage.getItem("user");
     if (stored) {
       const parsed = JSON.parse(stored);
-      setUser({ name: parsed.name, profileImage: parsed.profileImage, role: parsed.role || "Employee" });
+      setUser({ name: parsed.name, role: parsed.role || "Employee" });
     }
   }, []);
 
@@ -61,7 +61,7 @@ export default function Header({ userName, showNewRequestButton = false }: Heade
     <div className="flex items-center justify-between mb-8">
       <div className="flex items-center gap-3">
         <div className="md:hidden">
-          <Avatar name={user.name || displayName} profileImage={user.profileImage} size="lg" />
+          <Avatar name={user.name || displayName} size="lg" />
         </div>
         <div>
           <h2 className="text-xl font-bold text-gray-900 lg:text-2xl">Hello, {displayName}</h2>

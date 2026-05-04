@@ -29,7 +29,7 @@ export default function Sidebar({ role }: SidebarProps) {
   const links = role === "manager" ? managerLinks : employeeLinks;
 
   const [state, setState] = useState({
-    user: { name: "", email: "", profileImage: null as string | null, department: "" },
+    user: { name: "", email: "", department: "" },
     mounted: false,
   });
 
@@ -38,8 +38,8 @@ export default function Sidebar({ role }: SidebarProps) {
     const parsed = stored ? JSON.parse(stored) : null;
     setState({
       user: parsed
-        ? { name: parsed.name, email: parsed.email, profileImage: parsed.profileImage, department: parsed.department }
-        : { name: "", email: "", profileImage: null, department: "" },
+        ? { name: parsed.name, email: parsed.email, department: parsed.department }
+        : { name: "", email: "", department: "" },
       mounted: true,
     });
   }, []);
@@ -54,7 +54,7 @@ export default function Sidebar({ role }: SidebarProps) {
         {state.mounted ? (
           <>
             <div className="mx-auto mb-2 flex justify-center">
-              <Avatar name={state.user.name || "User"} profileImage={state.user.profileImage} size="lg" />
+              <Avatar name={state.user.name || "User"} size="lg" />
             </div>
             <p className="font-medium text-gray-900">{state.user.name}</p>
             <p className="text-sm text-gray-500">{state.user.email}</p>
