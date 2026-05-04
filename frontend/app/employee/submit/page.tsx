@@ -44,7 +44,7 @@ export default function LeaveRequestForm() {
     };
 
     try {
-      const res = await fetch("http://localhost:8000/requests/", {
+      const res = await fetch("/_/backend/requests/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

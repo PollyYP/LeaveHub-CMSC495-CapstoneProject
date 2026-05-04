@@ -81,7 +81,7 @@ export default function ManagerDashboard() {
 
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8000/requests/");
+        const res = await fetch("/_/backend/requests/");
         const data = await res.json();
         setRequests(data);
       } catch (error) {
@@ -131,7 +131,7 @@ export default function ManagerDashboard() {
   const handleApprove = async (requestId: number) => {
     try {
       const res = await fetch(
-        `http://localhost:8000/requests/${requestId}/approve`,
+        `/_/backend/requests/${requestId}/approve`,
         { method: "PUT" }
       );
       if (res.ok) {
@@ -151,8 +151,8 @@ export default function ManagerDashboard() {
 
     const endpoint =
       commentAction === "reject"
-        ? `http://localhost:8000/requests/${commentingOn}/reject`
-        : `http://localhost:8000/requests/${commentingOn}/revision`;
+        ? `/_/backend/requests/${commentingOn}/reject`
+        : `/_/backend/requests/${commentingOn}/revision`;
 
     try {
       const res = await fetch(endpoint, {

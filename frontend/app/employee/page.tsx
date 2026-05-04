@@ -61,8 +61,8 @@ export default function EmployeeDashboard() {
     const fetchData = async () => {
       try {
         const [reqRes, balRes] = await Promise.all([
-          fetch(`http://localhost:8000/users/${user.userId}/requests`),
-          fetch(`http://localhost:8000/users/${user.userId}/balances`),
+          fetch(`/_/backend/users/${user.userId}/requests`),
+          fetch(`/_/backend/users/${user.userId}/balances`),
         ]);
 
         const reqData = await reqRes.json();

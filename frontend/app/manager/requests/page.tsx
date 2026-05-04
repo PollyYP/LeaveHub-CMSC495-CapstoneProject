@@ -51,7 +51,7 @@ export default function AllRequestsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8000/requests/");
+        const res = await fetch("/_/backend/requests/");
         const data = await res.json();
         setRequests(data);
       } catch (error) {

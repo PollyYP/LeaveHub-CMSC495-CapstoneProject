@@ -47,7 +47,7 @@ export default function MyRequestsPage() {
 
     const fetchRequests = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/users/${user.userId}/requests`);
+        const res = await fetch(`/_/backend/users/${user.userId}/requests`);
         const data = await res.json();
         setRequests(data);
       } catch (error) {

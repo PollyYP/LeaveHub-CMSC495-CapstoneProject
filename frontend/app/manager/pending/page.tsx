@@ -55,7 +55,7 @@ export default function PendingRequestsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8000/requests/");
+        const res = await fetch("/_/backend/requests/");
         const data = await res.json();
         setRequests(data.filter((r: LeaveRequest) => r.status === "Pending"));
       } catch (error) {
@@ -73,7 +73,7 @@ export default function PendingRequestsPage() {
 
   const handleApprove = async (requestId: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/requests/${requestId}/approve`, { method: "PUT" });
+      const res = await fetch(`/_/backend/requests/${requestId}/approve`, { method: "PUT" });
       if (res.ok) {
         setRequests((prev) => prev.filter((r) => r.requestId !== requestId));
       }
@@ -85,8 +85,8 @@ export default function PendingRequestsPage() {
   const handleRejectOrRevision = async () => {
     if (!commentingOn || !commentAction) return;
     const endpoint = commentAction === "reject"
-      ? `http://localhost:8000/requests/${commentingOn}/reject`
-      : `http://localhost:8000/requests/${commentingOn}/revision`;
+      ? `/_/backend/requests/${commentingOn}/reject`
+      : `/_/backend/requests/${commentingOn}/revision`;
     try {
       const res = await fetch(endpoint, {
         method: "PUT",
