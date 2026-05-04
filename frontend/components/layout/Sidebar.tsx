@@ -29,7 +29,7 @@ export default function Sidebar({ role }: SidebarProps) {
   const links = role === "manager" ? managerLinks : employeeLinks;
 
   const [state, setState] = useState({
-    user: { name: "", email: "", department: "" },
+    user: { name: "", email: "", department: "", startDate: "" },
     mounted: false,
   });
 
@@ -61,6 +61,11 @@ export default function Sidebar({ role }: SidebarProps) {
             <p className="text-xs text-gray-400 mt-1 capitalize">
               {role === "manager" ? "Manager" : state.user.department}
             </p>
+            {state.user.startDate && (
+              <p className="text-xs text-gray-400 mt-1">
+                Started {new Date(state.user.startDate + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+              </p>
+            )}
           </>
         ) : (
           <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-2 animate-pulse" />

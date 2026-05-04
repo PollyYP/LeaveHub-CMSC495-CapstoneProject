@@ -25,7 +25,7 @@ const managerLinks = [
 ];
 
 export default function Header({ userName, showNewRequestButton = false }: HeaderProps) {
-  const [user, setUser] = useState({ name: "", role: "" });
+  const [user, setUser] = useState({ name: "", role: "", startDate: "" });
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +33,7 @@ export default function Header({ userName, showNewRequestButton = false }: Heade
     const stored = localStorage.getItem("user");
     if (stored) {
       const parsed = JSON.parse(stored);
-      setUser({ name: parsed.name, role: parsed.role || "Employee" });
+      setUser({ name: parsed.name, role: parsed.role || "Employee", startDate: parsed.startDate || ""});
     }
   }, []);
 
@@ -66,6 +66,11 @@ export default function Header({ userName, showNewRequestButton = false }: Heade
         <div>
           <h2 className="text-xl font-bold text-gray-900 lg:text-2xl">Hello, {displayName}</h2>
           <p className="text-xs text-gray-500 lg:text-sm">{today}</p>
+          {user.startDate && (
+            <p className="text-xs text-gray-400 md:hidden">
+              Started {new Date(user.startDate + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+            </p>
+          )}
         </div>
       </div>
 
