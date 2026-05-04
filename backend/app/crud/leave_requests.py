@@ -137,3 +137,11 @@ def update_request(request_id: int, **fields) -> LeaveRequest | None:
             )
             row = cur.fetchone()
             return _row_to_request(row) if row else None
+
+def delete_request(request_id: int) -> bool:
+    with get_db() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "DELETE FROM leave_requests WHERE request_id = %s", (request_id,)
+            )
+            return cur.rowcount > 0

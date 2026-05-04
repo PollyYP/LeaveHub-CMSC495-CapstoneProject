@@ -195,3 +195,24 @@ def get_request_history(request_id: int):
 @router.get("/history/all")
 def get_all_request_history():
     return request_history_crud.get_all_history()
+
+
+@router.delete("/{request_id}")
+def delete_request(request_id: int, userId: int):
+    request = leave_requests_crud.get_request_by_id(request_id)
+    if not request:
+        raise HTTPException(status_code=404, detail="Leave request not found")
+
+    if request.userId != userId:
+        raise HTTPException(status_code=403, detail="You can only delete your own requests")
+
+    if request.status != "Pending":
+        raise HTTPException(status_code=400, detail="Only pending requests can be deleted")
+
+    leave_requests_crud.delete_request(request_id)
+
+    request_history_crud.create_history(
+        request_id=request_id, action="deleted", performed_by=userId
+    )
+
+    return {"message": "Leave request deleted"}

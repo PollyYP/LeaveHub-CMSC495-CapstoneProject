@@ -80,6 +80,30 @@ export default function EmployeeDashboard() {
     fetchData();
   }, []);
 
+  const handleDelete = async (requestId: number) => {
+    if (!confirm("Are you sure you want to delete this request?")) return;
+
+    const stored = localStorage.getItem("user");
+    if (!stored) return;
+    const user = JSON.parse(stored);
+
+    try {
+      const res = await fetch(`/_/backend/requests/${requestId}?userId=${user.userId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.detail || "Failed to delete request");
+        return;
+      }
+
+      setRequests(requests.filter((r) => r.requestId !== requestId));
+    } catch (error) {
+      alert("Failed to delete request");
+    }
+  };
+
   // Filter balances for current year
   const currentYear = new Date().getFullYear();
   const vacationBalance = balances.find(
@@ -189,7 +213,17 @@ export default function EmployeeDashboard() {
                     <p className="font-medium text-gray-900">
                       {request.leaveType}
                     </p>
-                    <StatusBadge status={request.status as "Pending" | "Approved" | "Rejected" | "Revision Requested"} />
+                    <div className="flex items-center gap-2">
+                      <StatusBadge status={request.status as "Pending" | "Approved" | "Rejected" | "Revision Requested"} />
+                      {request.status === "Pending" && (
+                        <button
+                          onClick={() => handleDelete(request.requestId)}
+                          className="text-xs text-red-500 hover:text-red-700 font-medium"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <p className="text-sm text-gray-500">
                     Requested for {formatDate(request.startDate)}

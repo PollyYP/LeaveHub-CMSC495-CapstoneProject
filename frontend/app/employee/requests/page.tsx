@@ -60,6 +60,30 @@ export default function MyRequestsPage() {
     fetchRequests();
   }, []);
 
+  const handleDelete = async (requestId: number) => {
+    if (!confirm("Are you sure you want to delete this request?")) return;
+
+    const stored = localStorage.getItem("user");
+    if (!stored) return;
+    const user = JSON.parse(stored);
+
+    try {
+      const res = await fetch(`/_/backend/requests/${requestId}?userId=${user.userId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.detail || "Failed to delete request");
+        return;
+      }
+
+      setRequests(requests.filter((r) => r.requestId !== requestId));
+    } catch (error) {
+      alert("Failed to delete request");
+    }
+  };
+
   const filters = ["All", "Pending", "Approved", "Rejected", "Revision Requested"];
 
   const filteredRequests = filter === "All"
@@ -143,7 +167,17 @@ export default function MyRequestsPage() {
                       </p>
                     </div>
                   </div>
-                  <StatusBadge status={request.status as "Pending" | "Approved" | "Rejected" | "Revision Requested"} />
+                  <div className="flex items-center gap-2">
+                    <StatusBadge status={request.status as "Pending" | "Approved" | "Rejected" | "Revision Requested"} />
+                    {request.status === "Pending" && (
+                      <button
+                        onClick={() => handleDelete(request.requestId)}
+                        className="text-xs text-red-500 hover:text-red-700 font-medium"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {request.description && (
