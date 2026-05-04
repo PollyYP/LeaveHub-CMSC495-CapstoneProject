@@ -26,6 +26,11 @@ export default function LoginPage() {
     const data = await res.json();
     localStorage.setItem("user", JSON.stringify(data.user));
 
+    if (password === "changeme") {
+      window.location.href = "/settings";
+      return;
+    }
+
     if (data.user.role === "Manager") {
       window.location.href = "/manager";
     } else {
